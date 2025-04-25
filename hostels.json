@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Cozy PG",
+        "location": "Koramangala",
+        "price": 3000,
+        "amenities": ["WiFi", "AC", "Laundry"],
+        "rating": 4.5,
+        "image": "hostel1.jpg"
+    },
+    {
+        "name": "Luxury Hostel",
+        "location": "Indiranagar",
+        "price": 5000,
+        "amenities": ["Gym", "Cafeteria", "Parking"],
+        "rating": 4.8,
+        "image": "hostel2.jpg"
+    },
+    {
+        "name": "Budget Stay",
+        "location": "Whitefield",
+        "price": 2000,
+        "amenities": ["WiFi", "Breakfast", "Hot Water"],
+        "rating": 4.0,
+        "image": "hostel3.jpg"
+    },
+    {
+        "name": "Green Nest Hostel",
+        "location": "Jayanagar",
+        "price": 1500,
+        "amenities": ["Garden", "WiFi", "Library"],
+        "rating": 4.2,
+        "image": "hostel4.jpg"
+    },
+    {
+        "name": "Urban Comfort",
+        "location": "HSR Layout",
+        "price": 4500,
+        "amenities": ["Laundry", "AC", "Parking"],
+        "rating": 4.6,
+        "image": "hostel5.jpg"
+    },
+    {
+        "name": "Sunny Stay",
+        "location": "Malleshwaram",
+        "price": 3500,
+        "amenities": ["WiFi", "24/7 Security", "Shared Kitchen"],
+        "rating": 4.3,
+        "image": "hostel6.jpg"
+    },
+    {
+        "name": "Dream Lodge",
+        "location": "Banashankari",
+        "price": 2800,
+        "amenities": ["AC", "Gym", "Laundry"],
+        "rating": 4.4,
+        "image": "hostel7.jpg"
+    },
+    {
+        "name": "Elite Hostel",
+        "location": "Bellandur",
+        "price": 5000,
+        "amenities": ["Cafeteria", "Parking", "WiFi"],
+        "rating": 4.7,
+        "image": "hostel8.jpg"
+    },
+    {
+        "name": "Pocket Stay",
+        "location": "Marathahalli",
+        "price": 1800,
+        "amenities": ["WiFi", "Hot Water", "Laundry"],
+        "rating": 4.1,
+        "image": "hostel9.jpg"
+    },
+    {
+        "name": "Peaceful Nest",
+        "location": "Basavanagudi",
+        "price": 1000,
+        "amenities": ["Garden", "Library", "WiFi"],
+        "rating": 3.9,
+        "image": "hostel10.jpg"
+    }
+]
