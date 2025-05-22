@@ -6,11 +6,16 @@ const path = require('path');
 require('dotenv').config(); // Load environment variables from .env file
 
 // MongoDB connection URI
-const mongoUri = process.env.MONGODB_URI;
+const mongoUri = process.env.MONGO_URI;
 
 
 // Connect to MongoDB
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // Define Mongoose schemas
 const hostelSchema = new mongoose.Schema({
@@ -61,21 +66,34 @@ app.post('/bulk-hostels', async (req, res) => {
 // API to search for hostels by price range
 app.get('/hostels/search', async (req, res) => {
     try {
-        const { minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER } = req.query;
+        const minPrice = parseInt(req.query.minPrice) || 0;
+        const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+        
+        console.log(`Searching for hostels with price between ${minPrice} and ${maxPrice}`);
 
         const hostels = await Hostel.find({
             price: { $gte: minPrice, $lte: maxPrice },
         });
+        
+        console.log(`Found ${hostels.length} hostels`);
 
         // Construct full image URLs for each hostel
-        const hostelsWithImages = hostels.map((hostel) => ({
-            ...hostel.toObject(),
-            image: `http://localhost:3000/images/${hostel.image}`,
-        }));
+        const hostelsWithImages = hostels.map((hostel) => {
+            if (!hostel) {
+                console.error('Found null hostel in results');
+                return null;
+            }
+            return {
+                ...hostel.toObject(),
+                image: `http://localhost:3000/images/${hostel.image}`,
+                _id: hostel._id.toString() // Convert ObjectId to string
+            };
+        }).filter(Boolean); // Remove any null entries
 
         res.json(hostelsWithImages);
     } catch (error) {
-        res.status(500).send(error);
+        console.error('Error in /hostels/search:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -86,6 +104,42 @@ app.delete('/hostels', async (req, res) => {
         res.send({ message: 'All hostels deleted successfully' });
     } catch (error) {
         res.status(500).send(error);
+    }
+});
+
+// Add a route to seed the database with initial data
+app.post('/seed-database', async (req, res) => {
+    try {
+        // First, clear the existing data
+        await Hostel.deleteMany({});
+        
+        // Read the hostels.json file
+        const hostelsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'hostels.json'), 'utf8'));
+        
+        // Insert the data into MongoDB
+        await Hostel.insertMany(hostelsData);
+        
+        res.json({ message: 'Database seeded successfully', count: hostelsData.length });
+    } catch (error) {
+        console.error('Error seeding database:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add a route to check database status
+app.get('/api/status', async (req, res) => {
+    try {
+        const count = await Hostel.countDocuments();
+        res.json({ 
+            status: 'ok',
+            message: 'Connected to database',
+            hostelsCount: count
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            status: 'error',
+            message: error.message
+        });
     }
 });
 
